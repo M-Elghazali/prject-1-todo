@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import TodoItem, { Todo } from './components/TodoItem'
 
+
 function App() {
   const [newTodo, setNewTodo] = useState<string>("")
   const [todos, setTodos] = useState<Todo[]>([])
@@ -12,6 +13,7 @@ function App() {
     const todoToAdd: Todo = {
       id: Date.now(),
       text: newTodo,
+      completed: false
     }
 
     setTodos([...todos, todoToAdd])
@@ -21,6 +23,16 @@ function App() {
   const handleDeleteTodo = (idToDelete: number) => {
     const newTodosArray = todos.filter(todo => todo.id !== idToDelete)
     setTodos(newTodosArray)
+  }
+
+  const handleToggleComplete = (idToToggle: number) => {
+    setTodos(
+      todos.map(todo => 
+        todo.id === idToToggle 
+          ? { ...todo, completed: !todo.completed } 
+          : todo
+      )
+    )
   }
 
   return (
@@ -56,6 +68,7 @@ function App() {
                 key={todo.id} 
                 todo={todo} 
                 onDelete={handleDeleteTodo} 
+                onToggleComplete={handleToggleComplete}
               />
             ))}
           </ul>
